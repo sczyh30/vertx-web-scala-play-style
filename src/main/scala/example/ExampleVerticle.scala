@@ -56,13 +56,9 @@ class ExampleVerticle extends VertxWebVerticle {
     // Validate request token.
     rtkOps match {
       case Some(rtk) => async {
-        val credential = await {
-          authService.auth(rtk)
-        }
+        val credential = await { authService.auth(rtk) }
         val userId = credential.getString("uid")
-        val user = await {
-          userService.getUser(userId)
-        }
+        val user = await { userService.getUser(userId) }
         Ok(Json.obj(User.unapply(user).get).encodePrettily) // Body in string format.
       }
       case None => Future.successful(NotFound(Json.obj("message" -> "not_found")))
